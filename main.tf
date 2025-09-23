@@ -14,7 +14,7 @@ provider "aws" {
 
 resource "aws_instance" "app_server" {
   ami           = "ami-0c5777a14602ab4b9"  # Amazon Linux 2023
-  instance_type = "t4g.small"  # Graviton
+  instance_type = "t4g.nano"  # Graviton
 
   tags = {
     Name = "ExampleAppServerInstance"
