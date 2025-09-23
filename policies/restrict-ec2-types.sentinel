@@ -6,12 +6,22 @@ allowed_types = ["t2.micro", "t3.micro", "t4g.nano", "t4g.micro"]
 # plan内で作成または更新されるすべてのaws_instanceリソースを検索
 ec2_instances = filter tfplan.resource_changes as _, rc {
   rc.type is "aws_instance" and
+  rc.mode is "managed" and
   (rc.change.actions contains "create" or rc.change.actions contains "update")
 }
 
-# メインルール:すべてのEC2インスタンスのタイプが許可リストに含まれていることを検証
+# 違反するインスタンスをチェック
+violating_instances = filter ec2_instances as _, instance {
+  instance.change.after.instance_type not in allowed_types
+}
+
+# 違反があった場合のメッセージ出力
+for violating_instances as address, instance {
+  print("VIOLATION:", address, "uses instance type", instance.change.after.instance_type)
+  print("Allowed instance types:", allowed_instance_types)
+}
+
+# メインルール: 違反するインスタンスが0個であること
 main = rule {
-  all ec2_instances as _, instance {
-    instance.change.after.instance_type in allowed_types
-  }
+  length(violating_instances) is 0
 }
