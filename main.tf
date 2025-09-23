@@ -13,8 +13,8 @@ provider "aws" {
 }
 
 resource "aws_instance" "app_server" {
-  ami           = "ami-06a974f9b8a97ecf2"  # Amazon Linux 2023
-  instance_type = "t3.micro"
+  ami           = "ami-0c5777a14602ab4b9"  # Amazon Linux 2023
+  instance_type = "t4g.micro"  # Graviton
 
   tags = {
     Name = "ExampleAppServerInstance"
