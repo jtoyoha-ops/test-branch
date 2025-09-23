@@ -15,7 +15,6 @@ provider "aws" {
 resource "aws_instance" "app_server" {
   ami           = "ami-06a974f9b8a97ecf2"  # Amazon Linux 2023
   instance_type = "t3.micro"
-  instance_state = "stopped"
 
   tags = {
     Name = "ExampleAppServerInstance"
